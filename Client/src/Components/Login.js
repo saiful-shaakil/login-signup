@@ -1,11 +1,12 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   const signIn = (e) => {
     e.preventDefault();
     fetch("http://localhost:5000/login", {
@@ -16,7 +17,13 @@ function Login() {
       body: JSON.stringify({ email: email, password: password }),
     })
       .then((res) => res.json())
-      .then((data) => console.log(data));
+      .then((data) => {
+        toast.error(data?.error && data.error);
+        toast.success(data?.message && data.message);
+        if (data.message) {
+          navigate("/logged");
+        }
+      });
   };
   return (
     <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 border">

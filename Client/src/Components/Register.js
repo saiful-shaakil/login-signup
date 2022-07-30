@@ -1,12 +1,14 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confPassword, setconfPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const signIn = (e) => {
     e.preventDefault();
@@ -23,7 +25,11 @@ function Register() {
     })
       .then((res) => res.json())
       .then((data) => {
-        toast.error(data.error);
+        toast.error(data?.error && data.error);
+        toast.success(data?.message && data.message);
+        if (data.message) {
+          navigate("/");
+        }
       });
   };
   return (

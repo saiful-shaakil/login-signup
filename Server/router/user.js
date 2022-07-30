@@ -18,6 +18,9 @@ router.post("/register", async (req, res) => {
   const { email, password, confPassword } = req.body;
 
   // Handling the errors
+  if (!email && !password && !confPassword) {
+    return res.json({ status: "Error", error: "Fill the form please." });
+  }
   if (!email) {
     return res.json({ status: "Error", error: "Invalid Email." });
   }
@@ -50,7 +53,7 @@ router.post("/register", async (req, res) => {
     if (error.code === 1100) {
       return res.json({ status: "Error", error: "Email is already used." });
     } else {
-      return res.json({ status: "Error", error: error.message });
+      return res.json({ status: "Error", error: "User already existed." });
     }
   }
 });
@@ -63,20 +66,23 @@ router.post("/login", async (req, res) => {
   if (!email || !password) {
     return res.json({
       status: "error",
-      message: "Invalid email and password.",
+      error: "Invalid email and password.",
     });
   }
   // trying to findout
   UserSchema.findOne({ email: email }, (err, result) => {
     if (err) {
-      res.json({ status: "error", message: err.message });
+      res.json({
+        status: "error",
+        error: "No user found using this email and password.",
+      });
     }
     if (result) {
       bcrypt.compare(password, result.password, (err, response) => {
         if (err) {
           res.json({
             status: "Error",
-            message: "No user found using this email and password.",
+            error: "No user found using this email and password.",
           });
         }
         if (response) {
@@ -93,16 +99,22 @@ router.post("/login", async (req, res) => {
               user: result,
             });
           } catch (err) {
-            res.json({ status: "error", message: err.message });
+            res.json({
+              status: "error",
+              error: "No user found using this email and password.",
+            });
           }
         } else {
-          res.json({ status: "error", message: "Password not matched." });
+          res.json({
+            status: "error",
+            error: "No user found using this email and password.",
+          });
         }
       });
     } else {
       res.json({
         status: "error",
-        message: "No user found using this email and password.",
+        error: "No user found using this email and password.",
       });
     }
   });
