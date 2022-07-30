@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const helmet = require("helmet");
 const cors = require("cors");
 require("dotenv").config();
+const user = require("./router/user");
 
 //PORT
 const PORT = process.env.PORT || 5000;
@@ -25,6 +26,8 @@ mongoose.connect(
     console.log("Connected to mongo");
   }
 );
+
+app.use("/", user);
 
 //listening by port
 app.listen(PORT, () => {
