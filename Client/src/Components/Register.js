@@ -12,7 +12,7 @@ function Register() {
 
   const signIn = (e) => {
     e.preventDefault();
-    fetch("http://localhost:5000/register", {
+    fetch("https://cryptic-forest-43888.herokuapp.com/register", {
       method: "POST",
       headers: {
         "content-type": "application/json",

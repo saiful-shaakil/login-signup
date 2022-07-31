@@ -69,7 +69,7 @@ router.post("/login", async (req, res) => {
       error: "Invalid email and password.",
     });
   }
-  // trying to findout
+  // trying to findout user
   UserSchema.findOne({ email: email }, (err, result) => {
     if (err) {
       res.json({
